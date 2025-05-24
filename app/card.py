@@ -48,3 +48,11 @@ class Card:
             rank = str(rank)
 
         return f"{rank} of {self.suit}"
+
+    def omittion(self) -> str:
+        """Return a string representation of the card for model input."""
+        if self.rank <= Rank.TEN:
+            return f"{self.rank.value}{self.suit.name[0].lower()}"
+        else:
+            rank_str = {Rank.JACK: 'J', Rank.QUEEN: 'Q', Rank.KING: 'K', Rank.ACE: 'A'}
+            return f"{rank_str[self.rank]}{self.suit.name[0].lower()}"
