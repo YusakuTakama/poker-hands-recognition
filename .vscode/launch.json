@@ -62,7 +62,7 @@
             ]
         },
         {
-            "name": "bbox_only_model/main.py 1GPU(3)",
+            "name": "bbox_only_model/main.py 1GPU(0)",
             "type": "debugpy",
             "request": "launch",
             "module": "model.main",
