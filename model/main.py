@@ -9,7 +9,7 @@ def parse_option():
     parser = argparse.ArgumentParser(
         'Model training and evaluation script', add_help=False)
     # easy config modification
-    parser.add_argument('--batch-size', type=int,
+    parser.add_argument('--batch_size', type=int,
                         help="batch size for single GPU")
     parser.add_argument('--epochs', type=int, default=300,
                         help="number of epochs to train")
