@@ -1,12 +1,7 @@
 import streamlit as st
 from PIL import Image
-from detection_model.model_factory import build_model
-from app import HandsRecognizer
-
-
-# Streamlitのセッション状態で結果を保持
-if 'results' not in st.session_state:
-    st.session_state.results = []
+from ultralytics import YOLO
+from app import HandsRecognizer, Card, Rank, Suit
 
 
 def upload_image():
@@ -20,10 +15,15 @@ def upload_image():
     return None
 
 
-def main():
+def show():
+
+    # Streamlitのセッション状態で結果を保持
+    if 'results' not in st.session_state:
+        st.session_state.results = []
+
     st.title("ポカログNet - ポーカーハンド履歴")
     if 'model' not in st.session_state:
-        st.session_state.model = build_model("yolov11")
+        st.session_state.model = YOLO('./pretrain_weight/best.pt')  # モデルのロード
 
     image = upload_image()  # PIL Imageオブジェクト
 
@@ -31,19 +31,24 @@ def main():
         if st.button("カード認識処理を開始"):
             current_result = {}  # 現在の処理結果を初期化
 
-            # 1. BBox検出 (入力はPIL Image)．7つになるまで繰り返す．
-            while True:
-                bboxes = st.session_state.model.detect(image)
-                if len(bboxes) == 7:
-                    break
-                else:
-                    st.warning(f"検出されたカードの数が7枚未満です。再度検出を試みます... (現在の枚数: {len(bboxes)})")
-
-            cards_bbox = st.session_state.model.detect(image)
-            current_result['bboxes'] = cards_bbox
+            # 1. BBox検出 (入力はPIL Image)．
+            cards = st.session_state.model.detect(image)
+            # cards = [
+            #     Card(suit=Suit.HEARTS, rank=Rank.ACE),
+            #     Card(suit=Suit.HEARTS, rank=Rank.KING),
+            #     Card(suit=Suit.HEARTS, rank=Rank.QUEEN),
+            #     Card(suit=Suit.HEARTS, rank=Rank.JACK),
+            #     Card(suit=Suit.HEARTS, rank=Rank.TEN),
+            #     Card(suit=Suit.HEARTS, rank=Rank.NINE),
+            #     Card(suit=Suit.HEARTS, rank=Rank.EIGHT)
+            # ]  # ダミーのカードデータ
+            if cards is None:
+                # エラーを吐いて中断
+                st.error("カードの検出に失敗しました。画像を確認してください。")
+            current_result['cards'] = cards
 
             # 2. カード分類と役判定を行う
-            recognizer = HandsRecognizer(cards_bbox)
+            recognizer = HandsRecognizer(cards)
             hand_rank, best_hand = recognizer.evaluate()
             current_result['hand_rank'] = hand_rank.value
             current_result['best_hand'] = [str(card) for card in best_hand]
