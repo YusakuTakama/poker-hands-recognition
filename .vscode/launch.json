@@ -65,7 +65,7 @@
             "name": "bbox_only_model/main.py 1GPU(0)",
             "type": "debugpy",
             "request": "launch",
-            "module": "model.main",
+            "module": "detection_model.main",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
@@ -79,10 +79,29 @@
                 "--epochs",
                 "300",
                 "--data_path",
-                "model/data_bbox_only/data.yaml",
+                "detection_model/data_bbox_only/data.yaml",
                 "--model",
                 "yolov11",
                 "--eval",
+            ]
+        },
+        {
+            "name": "app/main.py 1GPU(3)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "app.main",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0",
+                // "CUDA_LAUNCH_BLOCKING": "1",
+            },
+            "justMyCode": false,
+            "args": [
+                "-i",
+                "/mnt/HDD12TB-2/takama/poker-hands-recognition/IMG_1431.jpg",
+                "--model",
+                "yolov11",
             ]
         },
     ]

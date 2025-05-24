@@ -1,4 +1,4 @@
-path: ./model/data # データセットのルートパス (適宜変更してください)
+path: ./detection_model/data # データセットのルートパス (適宜変更してください)
 train: images/train # train イメージは path/images/train にあると仮定
 val: images/val # val イメージは path/images/val にあると仮定
 
