@@ -1,0 +1,7 @@
+path: ./model/data_easy # データセットのルートパス (適宜変更してください)
+train: images/train # train イメージは path/images/train にあると仮定
+val: images/val # val イメージは path/images/val にあると仮定
+
+# Classes
+nc: 1 # クラス数
+names: [card]
