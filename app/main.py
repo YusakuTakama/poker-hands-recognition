@@ -1,4 +1,4 @@
-from model.model_factory import build_model
+from detection_model.model_factory import build_model
 from .hands_recognition import HandsRecognizer
 from argparse import ArgumentParser
 
