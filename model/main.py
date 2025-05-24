@@ -2,6 +2,7 @@ import argparse
 
 from .model_factory import build_model
 from .train import train_model
+from .val import validate_model
 
 
 def parse_option():
@@ -29,6 +30,9 @@ def main():
 
     # Train the model
     model = train_model(model, args)
+
+    # Validate the model
+    # validate_model(model, args)
 
 
 if __name__ == '__main__':
