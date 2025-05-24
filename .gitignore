@@ -1,0 +1,11 @@
+__pycache__/
+log/
+comet_logs/
+tf_logs/
+downloaded_data/
+pretrained_models/
+.hypothesis/
+hub/
+.mypy_cache/
+.pytest_cache/
+.venv/

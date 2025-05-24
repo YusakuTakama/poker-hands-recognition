@@ -1,0 +1,62 @@
+## general
+jupyter
+matplotlib
+numpy
+pandas
+scikit-image
+scikit-learn
+scipy
+tqdm
+wheel
+
+
+## training and logging
+comet_ml
+webdataset
+# deepspeed
+# tensorboard
+# tensorboardX
+
+
+## PEP8, lint
+flake8-fixme
+flake8-functions-names
+flake8-variables-names
+pep8-naming
+
+
+## pytorch
+torch
+torchvision
+torchaudio
+git+https://github.com/facebookresearch/pytorchvideo.git
+lightning
+# torchinfo
+# torchmetrics
+# pytorch-metric-learning
+
+
+## huggingface
+transformers[torch]
+# huggingface_hub[cli,torch]
+# accelerate
+datasets[vision]
+# diffusers
+# evaluate
+# tokenizers
+
+
+## vision-specific
+albumentations
+imgaug
+av
+kornia>=0.6.10
+# opencv-python4.7.0.72 doesn't have FFMPEG?
+opencv-python<4.6
+opencv-python-headless<4.6
+
+
+## COCO
+# pycocotools>=2.0.6
+# kwcoco>=0.5.8
+# pycocoevalcap>=1.2
