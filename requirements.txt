@@ -63,3 +63,4 @@ opencv-python-headless<4.6
 
 ## add
 ultralytics
+streamlit
