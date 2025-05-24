@@ -8,6 +8,7 @@ scikit-learn
 scipy
 tqdm
 wheel
+ultralytics
 
 
 ## training and logging

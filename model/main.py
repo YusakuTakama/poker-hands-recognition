@@ -1,8 +1,8 @@
 import argparse
 
-from .model_factory import build_model
-from .train import train_model
-from .val import validate_model
+from model.model_factory import build_model
+from model.train import train_model
+from model.val import validate_model
 
 
 def parse_option():
@@ -13,11 +13,13 @@ def parse_option():
                         help="batch size for single GPU")
     parser.add_argument('--epochs', type=int, default=300,
                         help="number of epochs to train")
-    parser.add_argument('--data-path', type=str, help='path to dataset')
+    parser.add_argument('--data_path', type=str, help='path to dataset')
     parser.add_argument('--output', type=str, default='./checkpoints',
                         help='path to save the trained model')
     parser.add_argument('--model', type=str, default='yolov11',
                         help='model name to use for training')
+    parser.add_argument('--eval', action='store_true',
+                        help='evaluate the model after training')
     args = parser.parse_args()
     return args
 
@@ -31,8 +33,9 @@ def main():
     # Train the model
     model = train_model(model, args)
 
-    # Validate the model
-    # validate_model(model, args)
+    # Evaluate the model if specified
+    if args.eval:
+        validate_model(model, args)
 
 
 if __name__ == '__main__':
