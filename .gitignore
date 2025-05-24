@@ -9,3 +9,5 @@ hub/
 .mypy_cache/
 .pytest_cache/
 .venv/
+*.pt
+runs/*
