@@ -29,7 +29,7 @@ if __name__ == "__main__":
     model = build_model("yolov11")
     input_image = args.image
 
-    cards = model.predict(input_image)
+    cards = model.detect(input_image)
     recognizer = HandsRecognizer(cards)
     hand_rank, best_hand = recognizer.evaluate()
 
