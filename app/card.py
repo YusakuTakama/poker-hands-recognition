@@ -4,10 +4,10 @@ from enum import Enum
 
 class Suit(Enum):
     """An enumeration representing the suits of a standard deck of cards."""
-    HEARTS = "Hearts"
-    DIAMONDS = "Diamonds"
-    CLUBS = "Clubs"
-    SPADES = "Spades"
+    HEARTS = "h"
+    DIAMONDS = "d"
+    CLUBS = "c"
+    SPADES = "s"
 
 
 class Rank(Enum):
