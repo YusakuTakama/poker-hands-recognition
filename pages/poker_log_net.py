@@ -1,7 +1,24 @@
 import streamlit as st
 from PIL import Image
 from app import HandsRecognizer
+from app.hands_recognition import HandRank
 from detection_model import YoLoViTDetector
+from collections import Counter
+
+
+# HandRankの英語名と日本語名の対応マッピング
+HAND_RANK_JAPANESE = {
+    'HIGH_CARD': 'ハイカード',
+    'ONE_PAIR': 'ワンペア',
+    'TWO_PAIR': 'ツーペア',
+    'THREE_OF_A_KIND': 'スリーカード',
+    'STRAIGHT': 'ストレート',
+    'FLUSH': 'フラッシュ',
+    'FULL_HOUSE': 'フルハウス',
+    'FOUR_OF_A_KIND': 'フォーカード',
+    'STRAIGHT_FLUSH': 'ストレートフラッシュ',
+    'ROYAL_FLUSH': 'ロイヤルストレートフラッシュ'
+}
 
 
 def upload_image():
@@ -10,9 +27,31 @@ def upload_image():
     if uploaded_file is not None:
         # アップロードされたファイルをPIL.Imageオブジェクトに変換
         image = Image.open(uploaded_file)
-        st.image(image, caption='アップロードされた画像', use_column_width=True)
+        st.image(image, caption='アップロードされた画像', use_container_width=True)
         return image
     return None
+
+
+def display_hand_statistics():
+    """役の統計情報を表示する関数"""
+    if 'results' not in st.session_state or not st.session_state.results:
+        return
+
+    # 役の集計を行う
+    hand_ranks = [res['hand_rank'] for res in st.session_state.results if 'hand_rank' in res]
+    rank_counter = Counter(hand_ranks)
+
+    st.subheader("役の統計情報")
+
+    # 全ての役を表示する（出現回数0の役も含む）
+    all_ranks = [rank.name for rank in HandRank]
+    for rank_name in all_ranks:
+        count = rank_counter.get(rank_name, 0)
+        japanese_name = HAND_RANK_JAPANESE.get(rank_name, rank_name)
+        st.write(f"{japanese_name}：{count}回")
+
+    # 総対戦数
+    st.write(f"総計：{len(hand_ranks)}回")
 
 
 def show():
@@ -42,28 +81,29 @@ def show():
             recognizer = HandsRecognizer(cards)
             hand_rank, best_hand = recognizer.evaluate()
             current_result['hand_rank'] = hand_rank.name
-            current_result['best_hand'] = [str(card) for card in best_hand]
+            current_result['best_hand'] = best_hand
 
             # 3. 役判定結果を記録
             st.session_state.results.append(current_result)
             st.success("カード認識と役判定が完了しました。結果を保存しました。")
-            st.write(f"役: {hand_rank.name}")
-            st.write("ベストハンド:")
-            for card_str in best_hand:
-                st.write(f"  {card_str}")
+            japanese_name = HAND_RANK_JAPANESE.get(hand_rank.name, hand_rank.name)
+            st.write(f" {japanese_name}")
+            st.write("ハンド:  " + ", ".join(card.omittion() for card in best_hand))
 
     # 保存された結果の表示
     if st.session_state.results:
-        st.subheader("保存された認識結果")
+        st.subheader("これまでの役履歴")
         for i, res in enumerate(st.session_state.results):
             st.write(f"--- 結果 {i+1} ---")
             if 'hand_rank' in res:
-                st.write(f"役: {res['hand_rank']}")
+                japanese_name = HAND_RANK_JAPANESE.get(res['hand_rank'], res['hand_rank'])
+                st.write(f"{japanese_name}")
             if 'best_hand' in res:
-                st.write("ベストハンド:")
-                for card_str in res['best_hand']:
-                    st.write(f"  {card_str}")
+                st.write("ハンド:  " + ", ".join(card.omittion() for card in res['best_hand']))
             st.write("--------------------")
+
+        # 役の統計情報を表示
+        display_hand_statistics()
 
 
 if __name__ == "__main__":
