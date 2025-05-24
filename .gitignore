@@ -11,3 +11,4 @@ hub/
 .venv/
 *.pt
 runs/*
+dataset/single_card/images/*
