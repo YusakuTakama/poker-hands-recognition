@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
-from ultralytics import YOLO
-from app import HandsRecognizer, Card, Rank, Suit
+from app import HandsRecognizer
+from detection_model import YoLoViTDetector
 
 
 def upload_image():
@@ -23,7 +23,7 @@ def show():
 
     st.title("ポカログNet - ポーカーハンド履歴")
     if 'model' not in st.session_state:
-        st.session_state.model = YOLO('./pretrain_weight/best.pt')  # モデルのロード
+        st.session_state.model = YoLoViTDetector()
 
     image = upload_image()  # PIL Imageオブジェクト
 
@@ -33,15 +33,6 @@ def show():
 
             # 1. BBox検出 (入力はPIL Image)．
             cards = st.session_state.model.detect(image)
-            # cards = [
-            #     Card(suit=Suit.HEARTS, rank=Rank.ACE),
-            #     Card(suit=Suit.HEARTS, rank=Rank.KING),
-            #     Card(suit=Suit.HEARTS, rank=Rank.QUEEN),
-            #     Card(suit=Suit.HEARTS, rank=Rank.JACK),
-            #     Card(suit=Suit.HEARTS, rank=Rank.TEN),
-            #     Card(suit=Suit.HEARTS, rank=Rank.NINE),
-            #     Card(suit=Suit.HEARTS, rank=Rank.EIGHT)
-            # ]  # ダミーのカードデータ
             if cards is None:
                 # エラーを吐いて中断
                 st.error("カードの検出に失敗しました。画像を確認してください。")
@@ -50,7 +41,7 @@ def show():
             # 2. カード分類と役判定を行う
             recognizer = HandsRecognizer(cards)
             hand_rank, best_hand = recognizer.evaluate()
-            current_result['hand_rank'] = hand_rank.value
+            current_result['hand_rank'] = hand_rank.name
             current_result['best_hand'] = [str(card) for card in best_hand]
 
             # 3. 役判定結果を記録
@@ -66,14 +57,6 @@ def show():
         st.subheader("保存された認識結果")
         for i, res in enumerate(st.session_state.results):
             st.write(f"--- 結果 {i+1} ---")
-            if 'classified_cards' in res and res['classified_cards']:
-                st.write("分類されたカード:")
-                # res['classified_cards'] が Card オブジェクトのリストの場合
-                for card_obj in res['classified_cards']:
-                    st.write(f"  {card_obj}")  # Cardオブジェクトが__str__を持つ前提
-            elif 'bboxes' in res:
-                st.write(f"検出されたBBoxの数: {len(res['bboxes'])}")
-
             if 'hand_rank' in res:
                 st.write(f"役: {res['hand_rank']}")
             if 'best_hand' in res:
@@ -84,4 +67,4 @@ def show():
 
 
 if __name__ == "__main__":
-    main()
+    show()

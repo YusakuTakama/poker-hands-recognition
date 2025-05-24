@@ -1,3 +1,3 @@
-from .model_factory import build_model
+from .detection_interface import YoLoViTDetector
 
-__all__ = ["build_model"]
+__all__ = ["YoLoViTDetector"]

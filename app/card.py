@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 class Suit(Enum):
@@ -10,7 +10,7 @@ class Suit(Enum):
     SPADES = "Spade"
 
 
-class Rank(Enum):
+class Rank(IntEnum):
     """An enumeration representing the ranks of a standard deck of cards."""
     TWO = 2
     THREE = 3
