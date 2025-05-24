@@ -8,7 +8,6 @@ scikit-learn
 scipy
 tqdm
 wheel
-ultralytics
 
 
 ## training and logging
@@ -61,3 +60,6 @@ opencv-python-headless<4.6
 # pycocotools>=2.0.6
 # kwcoco>=0.5.8
 # pycocoevalcap>=1.2
+
+## add
+ultralytics
