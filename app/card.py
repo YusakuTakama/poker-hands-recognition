@@ -4,10 +4,10 @@ from enum import Enum
 
 class Suit(Enum):
     """An enumeration representing the suits of a standard deck of cards."""
-    HEARTS = "h"
-    DIAMONDS = "d"
-    CLUBS = "c"
-    SPADES = "s"
+    HEARTS = "Heart"
+    DIAMONDS = "Diamond"
+    CLUBS = "Club"
+    SPADES = "Spade"
 
 
 class Rank(Enum):
@@ -35,4 +35,16 @@ class Card:
     rank: Rank
 
     def __str__(self) -> str:
-        return f"{self.rank} of {self.suit}"
+        rank = self.rank.value
+        if rank == 11:
+            rank = "Jack"
+        elif rank == 12:
+            rank = "Queen"
+        elif rank == 13:
+            rank = "King"
+        elif rank == 14:
+            rank = "Ace"
+        else:
+            rank = str(rank)
+
+        return f"{rank} of {self.suit}"
