@@ -1,6 +1,6 @@
-from detection_model.model_factory import build_model
 from .hands_recognition import HandsRecognizer
 from argparse import ArgumentParser
+from ultralytics import YOLO
 
 
 def parse_args():
@@ -26,7 +26,7 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
 
-    model = build_model("yolov11")
+    model = YOLO("detection_model/checkpoints/best.pt")
     input_image = args.image
 
     cards = model.detect(input_image)
